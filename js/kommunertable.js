@@ -52,8 +52,22 @@ function createTable(kommune) {
     cell = row.insertCell(cellCount++)
     cell.innerHTML = kommune.region.navn
 
-    row.id = kommune.navn
+    cell = row.insertCell(cellCount++)
+    let img = document.createElement("img")
+    img.setAttribute("src", kommune.hrefPicture)
+    img.setAttribute("alt", "Picture")
+    img.setAttribute("width", 150)
+    img.setAttribute("height", 150)
+    cell.appendChild(img)
 
+    cell = row.insertCell(cellCount++)
+    const dropdown = document.createElement('select');
+    const option = document.createElement("option")
+    option.textContent = kommune.region.navn
+    cell.append(dropdown)
+    dropdown.appendChild(option)
+
+    row.id = kommune.navn
     const pbDelete = document.createElement("input")
     pbDelete.type = "button"
     pbDelete.setAttribute("value", "Slet kommune")
