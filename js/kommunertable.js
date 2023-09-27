@@ -1,16 +1,17 @@
-import {fetchAnyUrl, restDelete} from "./modulejson.js";
+import {fetchAnyUrl, restDelete, fetchRegioner} from "./modulejson.js";
 
 const urlGetKommuner = "http://localhost:8080/kommuner"
 const urlDeleteKommune = "http://localhost:8080/deletekommune"
 const pbGetKommuner = document.getElementById("pbGetKommuner")
 const tblKommuner = document.getElementById("tblKommuner")
 let kommuner = []
-
+let regMap = new Map()
 
 async function fetchKommuner() {
     const colhead = document.getElementById("colhead")
     tblKommuner.innerHTML = ""
     tblKommuner.appendChild(colhead)
+    regMap = await fetchRegioner()
     kommuner = await fetchAnyUrl(urlGetKommuner)
     sortArray(kommuner)
     kommuner.forEach(createTable)
@@ -62,10 +63,17 @@ function createTable(kommune) {
 
     cell = row.insertCell(cellCount++)
     const dropdown = document.createElement('select');
-    const option = document.createElement("option")
-    option.textContent = kommune.region.navn
+    regMap.forEach(kom => {
+        const option = document.createElement("option")
+        option.textContent = kom.navn
+        option.value = kom.kode;
+        option.kommune = kom;
+        dropdown.appendChild(option)
+    })
+
     cell.append(dropdown)
-    dropdown.appendChild(option)
+    dropdown.value = kommune.region.kode
+
 
     row.id = kommune.navn
     const pbDelete = document.createElement("input")
